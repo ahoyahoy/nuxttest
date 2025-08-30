@@ -1,0 +1,14 @@
+---
+description: Always use shadcn-vue components
+globs:
+  - "**/*.vue"
+  - "**/*.ts"
+  - "**/*.tsx"
+alwaysApply: true
+---
+
+- For UI components, always use **shadcn-vue**.
+- When adding a new component, install it using:
+
+  ```bash
+  pnpm dlx shadcn-vue@latest add button
