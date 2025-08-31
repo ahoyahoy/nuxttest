@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', 'shadcn-nuxt', '@peterbud/nuxt-query', '@nuxtjs/i18n'],
+  modules: ['@nuxt/eslint', 'shadcn-nuxt', '@peterbud/nuxt-query', '@nuxtjs/i18n'],
   css: ['assets/css/tailwind.css'],
   pages: true,
   ssr: true,
