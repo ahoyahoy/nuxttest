@@ -20,11 +20,26 @@ export const useCreateQuery = <TQueryFn extends () => Promise<any>>(
   queryFn: TQueryFn,
   options: any = {}
 ) => {
-  return useQuery<Awaited<ReturnType<TQueryFn>>>({
+  const query = useQuery<Awaited<ReturnType<TQueryFn>>>({
     queryKey,
     queryFn,
     retry: 2,
     refetchOnWindowFocus: false,
     ...options,
   })
+
+  // Přidání suspense funkce pro SSR podporu
+  const suspense = async () => {
+    const queryClient = useQueryClient()
+    await queryClient.prefetchQuery({
+      queryKey,
+      queryFn,
+      ...options,
+    })
+  }
+
+  return {
+    ...query,
+    suspense,
+  }
 }

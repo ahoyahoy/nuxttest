@@ -1,6 +1,8 @@
 import tailwindcss from '@tailwindcss/vite'
 import type { NuxtPage } from '@nuxt/schema'
-import { getProductConfig } from './app/config/index'
+import { getProductConfig, getLocales, getDefaultLocale } from './app/config/index'
+
+const PRODUCT_ID = 'dm-cz'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -9,7 +11,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', 'shadcn-nuxt', '@peterbud/nuxt-query'],
+  modules: ['@nuxt/content', '@nuxt/eslint', 'shadcn-nuxt', '@peterbud/nuxt-query', '@nuxtjs/i18n'],
   css: ['assets/css/tailwind.css'],
   pages: true,
   ssr: true,
@@ -17,28 +19,23 @@ export default defineNuxtConfig({
   hooks: {
     'pages:extend' (pages: NuxtPage[]) {
       pages.length = 0
+
+      pages.push({
+        name: '404',
+        path: '/404',
+        file: '~/components/pages/404.vue'
+      })
       
-      const productConfig = getProductConfig('dm-cz')
+      const productConfig = getProductConfig(PRODUCT_ID)
       
       for (const route of productConfig.routes) {
-        if (typeof route.path === 'string') {
         pages.push({
-          name: route.path === '/' ? 'index' : route.path.slice(1).replace('/', '-'), // Handle nested paths
-            path: route.path,
-            file: `~/components/pages/${route.cmp}.vue`
-          })
-        }
-        else {
-          for (const locale of productConfig.locales) {
-            pages.push({
-              name: route.path[locale] === '/' ? 'index' : route.path[locale].slice(1).replace('/', '-'), // Handle nested paths
-              path: route.path[locale] as string,
-              file: `~/components/pages/${route.cmp}.vue`
-            })
-          }
-        }
+          name: route.name,
+          path: typeof route.path === 'string' ? route.path : route.path[getDefaultLocale(PRODUCT_ID)],
+          file: `~/components/pages/${route.cmp}.vue`
+        })
       }
-    }
+    },
   },
   vite: {
     plugins: [
@@ -48,6 +45,9 @@ export default defineNuxtConfig({
   shadcn: {
     prefix: '',
     componentDir: '~/components/ui'
+  },
+  experimental: {
+    scanPageMeta: true
   },
   nuxtQuery: {
     queryClientOptions: {
@@ -63,4 +63,19 @@ export default defineNuxtConfig({
     autoImports: false,
     devtools: true,
   },
+  i18n: {
+    locales: [
+      ...getLocales(PRODUCT_ID),
+    ],
+    defaultLocale: getDefaultLocale(PRODUCT_ID),
+    langDir: 'lang/',
+    customRoutes: 'config', // disable custom route with page components
+    pages: {
+      'grant-thanks': {
+        en: '/about-us', // -> accessible at /about-us (no prefix since it's the default locale)
+        cs: '/a-propos', // -> accessible at /fr/a-propos
+      }
+    }
+  }
+
 })

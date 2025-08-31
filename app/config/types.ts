@@ -1,4 +1,5 @@
 export interface RouteDef {
+  name: string
   path: string | { [locale: string]: string }
   cmp: string
   features?: string[]

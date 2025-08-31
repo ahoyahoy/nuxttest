@@ -17,6 +17,7 @@ export function createRouter(productId: ProductId): RouteRecordRaw[] {
         if (componentPath) {
             const pageComponent = pages[componentPath]
             routes.push({ 
+                name: route.name,
                 path: route.path, 
                 component: pageComponent as any, 
                 meta: route.meta 

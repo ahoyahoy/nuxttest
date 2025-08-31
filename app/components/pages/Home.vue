@@ -2,7 +2,11 @@
 import { usePlayersAndCharactersQuery } from '~/data/hooks/players';
 import PlayerModal from '~/components/PlayerModal.vue';
 
-const { data: players, isLoading, error, refetch } = usePlayersAndCharactersQuery();
+const { data: players, isLoading, error, refetch, suspense } = usePlayersAndCharactersQuery();
+
+onServerPrefetch(async () => {
+  await suspense()
+});
 
 definePageMeta({
   title: 'Domů',

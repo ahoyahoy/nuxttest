@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import type { Character, Player } from '@mj/api-demo/api/gen/ts/demo/v1/api_pb'
 import { Button } from '@/components/ui/button'
 import { 

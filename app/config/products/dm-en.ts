@@ -5,7 +5,7 @@ export const dmEn: ProductConfig = {
   locales: ['en'],
   defaultLocale: 'en',
   routes: [
-    { path: '/', cmp: 'Home', meta: { title: 'Home', description: 'Home' } },
+    { name: 'home', path: '/', cmp: 'Home'},
   ],
   capabilities: { tagsOnCharacter: true, grantPage: false },
   contentSlots: {

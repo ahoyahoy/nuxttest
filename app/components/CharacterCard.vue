@@ -14,14 +14,17 @@ const props = withDefaults(defineProps<Props>(), {
   showLabels: true
 });
 
-// Načteme data rasy a třídy podle ID z charakteru
-const { data: race, isLoading: isRaceLoading } = useRaceQuery({ id: props.character.raceId });
-const { data: characterClass, isLoading: isClassLoading } = useClassQuery({ id: props.character.classId });
+const { data: race, isLoading: isRaceLoading, suspense: raceSuspense } = useRaceQuery({ id: props.character.raceId });
+const { data: characterClass, isLoading: isClassLoading, suspense: classSuspense } = useClassQuery({ id: props.character.classId });
+
+onServerPrefetch(async () => {
+  await Promise.all([raceSuspense(), classSuspense()])
+})
+
 
 const isLoading = computed(() => isRaceLoading.value || isClassLoading.value)
 
 
-// Kombinace rasy a třídy pro avatar
 const avatarClass = computed(() => {
   return `${race.value?.name}-${characterClass.value?.name}`.toLowerCase()
 });
@@ -50,20 +53,19 @@ const avatarClass = computed(() => {
 </template>
 
 <style scoped>
-/* Základní avatar bez CSS proměnných */
 .avatar {
-  width: 64px; /* 334px * 0.19 pro rozumnou velikost */
+  width: 64px;
   height: 64px;
   background-image: url('/img/avatars.png');
   background-repeat: no-repeat;
-  background-size: 195px 195px; /* 1024px * 0.19 pro zachování poměrů */
+  background-size: 195px 195px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 3×3: Humans / Elves / Dwarves - přímé pozice */
+/* 3×3: Humans / Elves / Dwarves */
 /* Row 1 – Humans */
 .avatar.human-rogue   { background-position: 0px 0px; }
 .avatar.human-mage    { background-position: -66px 0px; } /* -345px * 0.19 = -65.55px ≈ -66px */
@@ -79,14 +81,13 @@ const avatarClass = computed(() => {
 .avatar.dwarf-mage    { background-position: -66px -131px; }
 .avatar.dwarf-warrior { background-position: -131px -131px; }
 
-/* velikosti - override základní velikost */
 .avatar.x1 { 
   width: 32px; 
   height: 32px; 
   background-size: 97px 97px; /* 1024px * 0.095 pro x1 */
 }
 
-/* Přepočítané pozice pro x1 (scale 0.095) */
+/* x1 (scale 0.095) */
 .avatar.x1.human-mage    { background-position: -33px 0px; } /* -66px * 0.5 */
 .avatar.x1.human-warrior { background-position: -66px 0px; } /* -131px * 0.5 */
 .avatar.x1.elf-rogue     { background-position: 0px -33px; }
@@ -102,7 +103,7 @@ const avatarClass = computed(() => {
   background-size: 292px 292px; /* 1024px * 0.285 pro x3 */
 }
 
-/* Přepočítané pozice pro x3 (scale 0.285/0.19 = 1.5) */
+/* x3 (scale 0.285/0.19 = 1.5) */
 .avatar.x3.human-mage    { background-position: -99px 0px; } /* -66px * 1.5 */
 .avatar.x3.human-warrior { background-position: -197px 0px; } /* -131px * 1.5 */
 .avatar.x3.elf-rogue     { background-position: 0px -99px; }
@@ -118,7 +119,7 @@ const avatarClass = computed(() => {
   background-size: 389px 389px; /* 1024px * 0.38 pro x4 */
 }
 
-/* Přepočítané pozice pro x4 (scale 0.38/0.19 = 2) */
+/* x4 (scale 0.38/0.19 = 2) */
 .avatar.x4.human-mage    { background-position: -132px 0px; } /* -66px * 2 */
 .avatar.x4.human-warrior { background-position: -262px 0px; } /* -131px * 2 */
 .avatar.x4.elf-rogue     { background-position: 0px -132px; }

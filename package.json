@@ -16,6 +16,7 @@
     "@mj/api-demo": "github:michaljurecko/api-demo#main",
     "@nuxt/content": "3.6.3",
     "@nuxt/eslint": "1.9.0",
+    "@nuxtjs/i18n": "10.0.6",
     "@peterbud/nuxt-query": "^1.1.0",
     "@tailwindcss/vite": "^4.1.12",
     "@tanstack/vue-query": "^5.85.6",

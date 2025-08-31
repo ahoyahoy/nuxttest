@@ -5,8 +5,10 @@ export const dmCz: ProductConfig = {
   locales: ['cs','en'],
   defaultLocale: 'cs',
   routes: [
-    { path: '/', cmp: 'Home' },
-    { path: {
+    { name: 'home', path: '/', cmp: 'Home' },
+    { 
+      name: 'grant-thanks',
+      path: {
        cs: '/dekujeme',
        en: '/thank-you'
       }, 
