@@ -1,75 +1,23 @@
-# Nuxt Minimal Starter
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+# Work Showcase - Nuxt 4 with TanStack Query
 
-Make sure to install dependencies:
 
-```bash
-# npm
-npm install
+## Data Management
+_**My Custom TanStack Query pattern**_ - implementation for efficient data handling
+- **Custom hooks** - demonstrated in [app/data/hooks/players.ts](app/data/hooks/players.ts)
+- **Optimistic updates** - implemented for player deletion (immediate UI updates)
+- **Automatic refetch** after adding new players
+  - Player sorting is not possible due to missing `createDate` field
+  - Also uses UUID v4 format for IDs, which is not suitable for chronological sorting
+- **Server-side validation** - player creation form handles server errors
+    - ability to submit invalid IČ for testing (Zod schema condition is commented out to allow this)
+- **Get Single item without proper api** - demonstrated in [app/data/hooks/classes.ts](app/data/hooks/classes.ts) with `useClassQuery` function
+- **RPC types integration** - implementation in [app/data/api/players.ts](app/data/api/players.ts)
+- **Keys factory** - TanStack keys factory in [app/data/utils/keys-factory.ts](app/data/utils/keys-factory.ts) ensures idiomatic cache key management
 
-# pnpm
-pnpm install
+## Translations
+*Coming soon*
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Dynamic Router
+*Coming soon*

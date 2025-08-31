@@ -1,0 +1,51 @@
+---
+description: Nuxt 4 — always use Nuxt v4 conventions (never v3)
+globs:
+  - "**/*.vue"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "nuxt.config.*"
+  - "app/**"
+  - "server/**"
+  - "shared/**"
+alwaysApply: true
+---
+
+# Project structure (Nuxt 4)
+- Split code into **`app/`** (client & app logic), **`server/`** (Nitro + API), and **`shared/`** (universal runtime code). Do not use the old Nuxt 3 root layout. 
+- **File-based routing** lives in `pages/`. Each `.vue` file is a route, root is `pages/index.vue`. 
+- **Route Groups** (directories in parentheses) group routes logically without changing the URL. 
+- Put **layouts** into `app/layouts/`, **middleware** into `app/middleware/`. 
+- **Assets vs Public**: processed styles/fonts/images go in `assets/`, static files go in `public/`. 
+
+# Data fetching
+- Use **`useFetch`** for HTTP calls (wrapper around `useAsyncData` + `$fetch`).  
+- Use **`useAsyncData`** for generic async sources. 
+- Nuxt 4 fetch defaults:
+  - `pendingWhenIdle: true`
+  - `purgeCachedData: true` (clear cache on navigation)
+  - `payloadExtraction: true` (SSR/Prerender)  
+  Configure in `nuxt.config`. 
+
+# Pages, meta & route rules
+- Define page meta using **`definePageMeta`** inside `pages/` components. 
+- **Route rules**: configure in `nuxt.config` or inline with **`defineRouteRules`** (requires `experimental.inlineRouteRules`). Use them for granular rendering (SSR/ISR/SSG). 
+
+# Server (Nitro)
+- Place API handlers in **`server/api`** or `server/routes`. They are auto-registered. Use `eventHandler` or `defineEventHandler`. 
+- Sensitive endpoints must validate on the server (not just in client middleware). 
+
+# Rendering & performance
+- Prefer **prerendering** where possible. Use route rules for mixed SSR/ISR/SSG. Payload extraction is enabled by default. 
+- Follow best practices for performance (Core Web Vitals, lazy code-splitting). 
+
+# Styling
+- Import UI frameworks through Nuxt modules. Keep custom SCSS/CSS/fonts/images in `assets/`. Use `public/` for static delivery. 
+
+# CLI (Nuxt 4)
+- Create new projects with `pnpm create nuxt`.  
+  Do not use the old `create-nuxt-app`. 
+
+# Legacy / forbidden
+- Do **not** use Nuxt 3 docs or folder layouts.  
+- Always check the official Nuxt 4 docs (`https://nuxt.com/docs/4.x/guide`) for up-to-date practices. 
