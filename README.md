@@ -50,6 +50,13 @@ _**Custom TanStack Query pattern**_ - implementation for efficient data handling
 
 
 
+## 🐛 Known Bugs
+
+### Nuxt i18n Browser Language Detection UI Desync
+- **Problem**: When `detectBrowserLanguage` redirects to browser's preferred language on first visit (root redirect), the UI language switcher doesn't reflect the actual current language
+- **Symptom**: App loads on `/en` URL but language switcher still shows Czech (or other default locale)  
+- **Root cause**: The initial browser detection redirect happens before Vue i18n UI components properly initialize
+
 ## 🔄 Postponed
 
 ### Monorepo

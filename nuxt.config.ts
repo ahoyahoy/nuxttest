@@ -29,9 +29,13 @@ export default defineNuxtConfig({
       const productConfig = getProductConfig(PRODUCT_ID)
       
       for (const route of productConfig.routes) {
+        const defaultLocale = getDefaultLocale(PRODUCT_ID)
+        const routePath = typeof route.path === 'string' 
+          ? route.path 
+          : route.path[defaultLocale] as string
         pages.push({
           name: route.name,
-          path: typeof route.path === 'string' ? route.path : route.path[getDefaultLocale(PRODUCT_ID)],
+          path: routePath,
           file: `~/components/pages/${route.cmp}.vue`
         })
       }
@@ -68,6 +72,14 @@ export default defineNuxtConfig({
       ...getLocales(PRODUCT_ID),
     ],
     defaultLocale: getDefaultLocale(PRODUCT_ID),
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root', // recommended for SEO
+      alwaysRedirect: false,
+      fallbackLocale: getDefaultLocale(PRODUCT_ID)
+    },
     langDir: 'lang/',
     customRoutes: 'config', // disable custom route with page components
     pages: {
