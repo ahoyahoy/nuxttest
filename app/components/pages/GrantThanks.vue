@@ -6,8 +6,8 @@ definePageMeta({
     paths: {
       en: '/thank-you',
       cs: '/dekujeme',
-    }
-  }
+    },
+  },
 })
 </script>
 
@@ -16,4 +16,3 @@ definePageMeta({
     thanks
   </div>
 </template>
-

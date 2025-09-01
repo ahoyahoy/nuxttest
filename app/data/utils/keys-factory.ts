@@ -1,17 +1,17 @@
 type Scopes = 'players' | 'classes' | 'races'
 type Kind = 'list' | 'item'
-type Params = Record<string, any>
+type Params = Record<string, unknown>
 type QueryKey = readonly unknown[]
 
-function sortObjectKeys<T extends Record<string, any>>(obj: T): T {
-  const sorted = {} as T
+function sortObjectKeys<T extends Record<string, unknown>>(obj: T): T {
+  const out: Partial<T> = {}
   Object.keys(obj)
     .sort()
     .forEach((key) => {
-      sorted[key as keyof T] = obj[key]
+      out[key as keyof T] = obj[key as keyof T]
     })
 
-  return sorted
+  return out as T
 }
 
 /**

@@ -28,7 +28,7 @@ export async function extractApiProperty<TResponse, K extends keyof TResponse>(
 // Protobuf message type
 type Message<TypeName extends string = string> = {
   readonly $typeName: TypeName
-  $unknown?: any
+  $unknown?: unknown
 }
 
 // Remove protobuf-specific properties
@@ -41,4 +41,4 @@ export type ApiParams<T extends Message> = OmitMessage<T>
 export type ApiResponse<T> = Promise<T>
 
 // Extract return type from API function
-export type ApiResult<T extends (...args: any[]) => Promise<any>> = Awaited<ReturnType<T>>
+export type ApiResult<T extends (...args: unknown[]) => Promise<unknown>> = Awaited<ReturnType<T>>
