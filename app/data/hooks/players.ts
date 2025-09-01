@@ -19,24 +19,30 @@ export function usePlayersAndCharactersQuery({enabled = true} = {}) {
   const queryKey = listPlayersAndCharactersKey()
   const queryClient = useQueryClient()
 
-  return useCreateQuery(
+  const query = useCreateQuery(
     queryKey,
     () => playersApi.list(),
     {
       enabled,
       ...everyMin(5),
       ...getCachedData(queryKey),
-      onSuccess: (players: ApiResult<typeof playersApi.list>) => {
-        players.forEach((playerData) => {
-          if (!playerData.player) {
-            return
-          }
-          const playerQueryKey = itemPlayerKey({id: playerData.player.id})
-          queryClient.setQueryData(playerQueryKey, playerData)
-        })
-      },
     },
   )
+
+  watch(query.data, (players) => {
+    if (!players) {
+      return
+    }
+    players.forEach((playerData) => {
+      if (!playerData.player) {
+        return
+      }
+      const playerQueryKey = itemPlayerKey({id: playerData.player.id})
+      queryClient.setQueryData(playerQueryKey, playerData)
+    })
+  })
+
+  return query
 }
 
 export function usePlayerQuery(params: GetPlayerParams) {
