@@ -4,12 +4,11 @@ import { VueQueryPlugin, QueryClient, hydrate, dehydrate } from '@tanstack/vue-q
 export default defineNuxtPlugin((nuxtApp) => {
   const vueQueryState = useState<DehydratedState | null>('vue-query')
 
-  // Vytvoříme QueryClient s konfigurací
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 1000 * 60 * 5, // 5 minut
-        gcTime: 1000 * 60 * 10,   // 10 minut (dříve cacheTime)
+        staleTime: 1000 * 60 * 5, 
+        gcTime: 1000 * 60 * 10,
         retry: 2,
         refetchOnWindowFocus: false,
       },
