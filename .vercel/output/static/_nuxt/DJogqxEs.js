@@ -1,0 +1,1 @@
+import{f as n,c as a,o as s,a as t}from"./gNuVCU2p.js";const o=n({__name:"404",setup(r){return(_,e)=>(s(),a("div",null,[...e[0]||(e[0]=[t("h1",null,"404",-1)])]))}}),l=Object.assign(o,{__name:"Pages404"});export{l as default};

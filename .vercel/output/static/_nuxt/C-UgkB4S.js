@@ -1,0 +1,1 @@
+import{f as n,c as a,o as e}from"./gNuVCU2p.js";const s={class:"min-h-screen bg-gray-50 p-8"},t=n({__name:"GrantThanks",setup(c){return(o,r)=>(e(),a("div",s," thanks "))}}),m=Object.assign(t,{__name:"PagesGrantThanks"});export{m as default};
