@@ -12,7 +12,8 @@ import {
   
     const callRpc = async <I extends DescMessage, O extends DescMessage>(
       schema: DescMethodUnary<I, O>,
-      originalInput: MessageInitShape<I> | undefined
+      originalInput: MessageInitShape<I> | undefined,
+      opts?: { headers?: HeadersInit }
     ): Promise<MessageShape<O>> => {
       // Create input object, it can be modificated here
       let input: MessageShape<I> = create(schema.input, originalInput);
@@ -23,7 +24,7 @@ import {
           schema,
           undefined,
           undefined,
-          {},
+          opts?.headers || {},
           input,
           undefined
         );
