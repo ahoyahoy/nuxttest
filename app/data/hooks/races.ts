@@ -1,6 +1,6 @@
 import {racesApi} from '~/data/api/races'
 import {keysFactory} from '~/data/utils/keys-factory'
-import {everyMin, getCachedData, useCreateQuery} from '~/data/utils/query-options'
+import {everyMin, getCachedData, createQuery} from '~/data/utils/query-utils'
 
 const kf = keysFactory('races')
 
@@ -10,7 +10,7 @@ const listRacesKey = () =>
 export function useRacesQuery({enabled = true} = {}) {
   const queryKey = listRacesKey()
 
-  return useCreateQuery(
+  return createQuery(
     queryKey,
     () => racesApi.list(),
     {

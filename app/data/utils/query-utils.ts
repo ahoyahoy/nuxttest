@@ -1,4 +1,4 @@
-import {useQuery, useQueryClient} from '@tanstack/vue-query'
+import {useMutation, useQuery, useQueryClient, type UseMutationOptions} from '@tanstack/vue-query'
 
 export const everyMin = (minutes: number) => ({
   staleTime: 1000 * 60 * minutes,
@@ -15,7 +15,7 @@ export const getCachedData = (queryKey: readonly unknown[]) => {
   }
 }
 
-export const useCreateQuery = <TQueryFn extends () => Promise<any>>(
+export const createQuery = <TQueryFn extends () => Promise<any>>(
   queryKey: readonly unknown[],
   queryFn: TQueryFn,
   options: any = {},
@@ -28,7 +28,6 @@ export const useCreateQuery = <TQueryFn extends () => Promise<any>>(
     ...options,
   })
 
-  // Přidání suspense funkce pro SSR podporu
   const suspense = async () => {
     const queryClient = useQueryClient()
     await queryClient.prefetchQuery({
@@ -42,4 +41,14 @@ export const useCreateQuery = <TQueryFn extends () => Promise<any>>(
     ...query,
     suspense,
   }
+}
+
+export const createMutation = <TParams, TData>(
+  apiFn: (params: TParams) => Promise<TData>,
+  options?: Omit<UseMutationOptions<TData, Error, TParams>, 'mutationFn'>,
+) => {
+  return useMutation<TData, Error, TParams>({
+    mutationFn: apiFn,
+    ...options,
+  })
 }

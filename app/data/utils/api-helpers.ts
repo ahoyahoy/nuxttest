@@ -41,4 +41,5 @@ export type ApiParams<T extends Message> = OmitMessage<T>
 export type ApiResponse<T> = Promise<T>
 
 // Extract return type from API function
-export type ApiResult<T extends (...args: unknown[]) => Promise<unknown>> = Awaited<ReturnType<T>>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ApiResult<T extends (...args: any[]) => Promise<unknown>> = Awaited<ReturnType<T>>

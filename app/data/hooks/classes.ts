@@ -2,7 +2,7 @@ import type {Class} from '@mj/api-demo/api/gen/ts/demo/v1/api_pb'
 
 import {classesApi} from '~/data/api/classes'
 import {keysFactory} from '~/data/utils/keys-factory'
-import {everyMin, getCachedData, useCreateQuery} from '~/data/utils/query-options'
+import {everyMin, getCachedData, createQuery} from '~/data/utils/query-utils'
 
 const kf = keysFactory('classes')
 
@@ -12,7 +12,7 @@ const listClassesKey = () =>
 export function useClassesQuery({enabled = true} = {}) {
   const queryKey = listClassesKey()
 
-  return useCreateQuery(
+  return createQuery(
     queryKey,
     () => classesApi.list(),
     {

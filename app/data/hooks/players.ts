@@ -1,11 +1,11 @@
-import {useMutation, useQueryClient} from '@tanstack/vue-query'
+import {useQueryClient} from '@tanstack/vue-query'
 
-import type {GetPlayerParams, CreatePlayerParams, UpdatePlayerParams, DeletePlayerParams} from '~/data/api/players'
+import type {GetPlayerParams} from '~/data/api/players'
 import type {ApiResult} from '~/data/utils/api-helpers'
 
 import {playersApi} from '~/data/api/players'
 import {keysFactory} from '~/data/utils/keys-factory'
-import {everyMin, getCachedData, useCreateQuery} from '~/data/utils/query-options'
+import {everyMin, getCachedData, createQuery, createMutation} from '~/data/utils/query-utils'
 
 const kf = keysFactory('players')
 
@@ -19,7 +19,7 @@ export function usePlayersAndCharactersQuery({enabled = true} = {}) {
   const queryKey = listPlayersAndCharactersKey()
   const queryClient = useQueryClient()
 
-  const query = useCreateQuery(
+  const query = createQuery(
     queryKey,
     () => playersApi.list(),
     {
@@ -48,7 +48,7 @@ export function usePlayersAndCharactersQuery({enabled = true} = {}) {
 export function usePlayerQuery(params: GetPlayerParams) {
   const queryKey = itemPlayerKey(params)
 
-  return useCreateQuery(
+  return createQuery(
     queryKey,
     () => playersApi.item(params),
     {
@@ -61,8 +61,7 @@ export function usePlayerQuery(params: GetPlayerParams) {
 export function usePlayerCreateMutation() {
   const queryClient = useQueryClient()
 
-  return useMutation<ApiResult<typeof playersApi.create>, Error, CreatePlayerParams>({
-    mutationFn: (params: CreatePlayerParams) => playersApi.create(params),
+  return createMutation(playersApi.create, {
     onSuccess: (data) => {
       if (data.id) {
         queryClient.setQueryData(itemPlayerKey({id: data.id}), {player: data})
@@ -78,8 +77,7 @@ export function usePlayerCreateMutation() {
 export function usePlayerUpdateMutation() {
   const queryClient = useQueryClient()
 
-  return useMutation<ApiResult<typeof playersApi.update>, Error, UpdatePlayerParams>({
-    mutationFn: (params: UpdatePlayerParams) => playersApi.update(params),
+  return createMutation(playersApi.update, {
     onSuccess: (data, variables) => {
       const id = data.id ?? variables.id
       if (id) {
@@ -97,9 +95,7 @@ export function usePlayerDeleteMutation() {
   const queryClient = useQueryClient()
   const listKey = listPlayersAndCharactersKey()
 
-  return useMutation<ApiResult<typeof playersApi.delete>, Error, DeletePlayerParams>({
-    mutationFn: params => playersApi.delete(params),
-
+  return createMutation(playersApi.delete, {
     onMutate: async (variables) => {
       await queryClient.cancelQueries({queryKey: listKey})
       const prev = queryClient.getQueryData<ApiResult<typeof playersApi.list>>(listKey)
@@ -113,13 +109,11 @@ export function usePlayerDeleteMutation() {
 
       return {prev}
     },
-
     onError: (_err, _vars, ctx) => {
       if (ctx && typeof ctx === 'object' && 'prev' in ctx && ctx.prev) {
         queryClient.setQueryData(listKey, ctx.prev)
       }
     },
-
     onSettled: () => {
       queryClient.invalidateQueries({queryKey: listKey})
     },
