@@ -1,19 +1,19 @@
-import type { ProductConfig } from '../types'
+import type {ProductConfig} from '../types'
 
 export const dmEn: ProductConfig = {
   id: 'dm-en',
   locales: ['en'],
   defaultLocale: 'en',
   routes: [
-    { name: 'home', path: '/', cmp: 'Home'},
+    {name: 'home', path: '/', cmp: 'Home'},
   ],
-  capabilities: { tagsOnCharacter: true, grantPage: false },
+  capabilities: {tagsOnCharacter: true, grantPage: false},
   contentSlots: {
-    footerSponsors: ['openai','microsoft','google','amazon']
+    footerSponsors: ['openai', 'microsoft', 'google', 'amazon'],
   },
   seo: {
     canonicalDomain: 'dungeon-master.com',
-    hreflang: ['en']
+    hreflang: ['en'],
   },
-  market: 'eu'
+  market: 'eu',
 }

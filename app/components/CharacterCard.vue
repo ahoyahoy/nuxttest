@@ -1,51 +1,50 @@
 <script setup lang="ts">
-import type { Character } from '@mj/api-demo/api/gen/ts/demo/v1/api_pb';
+import type {Character} from '@mj/api-demo/api/gen/ts/demo/v1/api_pb'
 
 interface Props {
-  character: Character;
-  size?: 'x1' | 'x2' | 'x3' | 'x4';
-  showLabels?: boolean;
+  character: Character
+  size?: 'x1' | 'x2' | 'x3' | 'x4'
+  showLabels?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'x2',
-  showLabels: true
-});
+  showLabels: true,
+})
 
-const { data: race, isLoading: isRaceLoading, suspense: raceSuspense } = useRaceQuery({ id: props.character.raceId });
-const { data: characterClass, isLoading: isClassLoading, suspense: classSuspense } = useClassQuery({ id: props.character.classId });
+const {data: race, isLoading: isRaceLoading, suspense: raceSuspense} = useRaceQuery({id: props.character.raceId})
+const {data: characterClass, isLoading: isClassLoading, suspense: classSuspense} = useClassQuery({id: props.character.classId})
 
 onServerPrefetch(async () => {
   await Promise.all([raceSuspense(), classSuspense()])
 })
 
-
 const isLoading = computed(() => isRaceLoading.value || isClassLoading.value)
-
 
 const avatarClass = computed(() => {
   return `${race.value?.name}-${characterClass.value?.name}`.toLowerCase()
-});
-
+})
 </script>
 
 <template>
   <div class="flex flex-col items-center space-y-1">
     <div v-if="isLoading">
-      <div class="animate-pulse h-12 w-12 rounded-full bg-gray-200"></div>
+      <div class="animate-pulse h-12 w-12 rounded-full bg-gray-200" />
     </div>
     <template v-else>
-    <div 
-      class="avatar"
-      :class="[avatarClass, size]"
-    ></div>
-    
-    <div class="text-center">
-      <div class="text-xs font-medium text-gray-900">{{ character.name }}</div>
-      <div class="text-xs text-gray-500">
-        {{ race?.name }} {{ characterClass?.name }}
+      <div
+        class="avatar"
+        :class="[avatarClass, size]"
+      />
+
+      <div class="text-center">
+        <div class="text-xs font-medium text-gray-900">
+          {{ character.name }}
+        </div>
+        <div class="text-xs text-gray-500">
+          {{ race?.name }} {{ characterClass?.name }}
+        </div>
       </div>
-    </div>
     </template>
   </div>
 </template>
@@ -79,9 +78,9 @@ const avatarClass = computed(() => {
 .avatar.dwarf-mage    { background-position: -66px -131px; }
 .avatar.dwarf-warrior { background-position: -131px -131px; }
 
-.avatar.x1 { 
-  width: 32px; 
-  height: 32px; 
+.avatar.x1 {
+  width: 32px;
+  height: 32px;
   background-size: 97px 97px; /* 1024px * 0.095 pro x1 */
 }
 
@@ -95,9 +94,9 @@ const avatarClass = computed(() => {
 .avatar.x1.dwarf-mage    { background-position: -33px -66px; }
 .avatar.x1.dwarf-warrior { background-position: -66px -66px; }
 
-.avatar.x3 { 
-  width: 96px; 
-  height: 96px; 
+.avatar.x3 {
+  width: 96px;
+  height: 96px;
   background-size: 292px 292px; /* 1024px * 0.285 pro x3 */
 }
 
@@ -111,9 +110,9 @@ const avatarClass = computed(() => {
 .avatar.x3.dwarf-mage    { background-position: -99px -197px; }
 .avatar.x3.dwarf-warrior { background-position: -197px -197px; }
 
-.avatar.x4 { 
-  width: 128px; 
-  height: 128px; 
+.avatar.x4 {
+  width: 128px;
+  height: 128px;
   background-size: 389px 389px; /* 1024px * 0.38 pro x4 */
 }
 

@@ -1,7 +1,7 @@
-import { createConnectTransport } from "@connectrpc/connect-web";
+import {createConnectTransport} from '@connectrpc/connect-web'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const runtimeConfig = useRuntimeConfig();
+  const runtimeConfig = useRuntimeConfig()
 
   const transport = createConnectTransport({
     baseUrl: `https://wa-catch-hiring-api.azurewebsites.net`,
@@ -14,10 +14,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       ignoreUnknownFields: true,
       useProtoFieldName: false,
     },
-  });
+  })
+
   return {
     provide: {
       rpcTransport: transport,
     },
-  };
-});
+  }
+})

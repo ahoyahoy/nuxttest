@@ -10,26 +10,26 @@ async function getTranslations(locale: string) {
   const baseTranslations = {
     cs: {
       navigation: {
-        home: "Domů",
-        thanks: "Děkujeme"
+        home: 'Domů',
+        thanks: 'Děkujeme',
       },
       common: {
-        welcome: "Vítejte",
-        loading: "Načítá se...",
-        error: "Chyba"
-      }
+        welcome: 'Vítejte',
+        loading: 'Načítá se...',
+        error: 'Chyba',
+      },
     },
     en: {
       navigation: {
-        home: "Home",
-        thanks: "Thank you bro"
+        home: 'Home',
+        thanks: 'Thank you bro',
       },
       common: {
-        welcome: "Welcome",
-        loading: "Loading...",
-        error: "Error"
-      }
-    }
+        welcome: 'Welcome',
+        loading: 'Loading...',
+        error: 'Error',
+      },
+    },
   }
 
   return baseTranslations[locale as keyof typeof baseTranslations] || {}

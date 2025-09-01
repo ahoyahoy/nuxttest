@@ -37,5 +37,9 @@
     "vue-router": "^4.5.1",
     "vue-sonner": "^2.0.8",
     "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "eslint-plugin-perfectionist": "^4.15.0",
+    "typescript": "^5.9.2"
   }
 }

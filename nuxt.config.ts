@@ -1,63 +1,83 @@
+import type {NuxtPage} from '@nuxt/schema'
+
 import tailwindcss from '@tailwindcss/vite'
-import type { NuxtPage } from '@nuxt/schema'
-import { getProductConfig, getLocales, getDefaultLocale } from './app/config/index'
+
+import {getProductConfig, getLocales, getDefaultLocale} from './app/config/index'
 
 const PRODUCT_ID = 'dm-cz'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  nitro: { 
-    preset: 'vercel',
+  modules: ['@nuxt/eslint', 'shadcn-nuxt', '@peterbud/nuxt-query', '@nuxtjs/i18n'],
+  ssr: true,
+  pages: true,
+
+  imports: {
+    dirs: [
+      'data/hooks/**',
+    ],
+  },
+  devtools: {enabled: true},
+  css: ['assets/css/tailwind.css'],
+  experimental: {
+    scanPageMeta: true,
   },
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  modules: ['@nuxt/eslint', 'shadcn-nuxt', '@peterbud/nuxt-query', '@nuxtjs/i18n'],
-  css: ['assets/css/tailwind.css'],
-  pages: true,
-  ssr: true,
-  
-  hooks: {
-    'pages:extend' (pages: NuxtPage[]) {
-      pages.length = 0
-
-      pages.push({
-        name: '404',
-        path: '/404',
-        file: '~/components/pages/404.vue'
-      })
-      
-      const productConfig = getProductConfig(PRODUCT_ID)
-      
-      for (const route of productConfig.routes) {
-        const defaultLocale = getDefaultLocale(PRODUCT_ID)
-        const routePath = typeof route.path === 'string' 
-          ? route.path 
-          : route.path[defaultLocale] as string
-        pages.push({
-          name: route.name,
-          path: routePath,
-          file: `~/components/pages/${route.cmp}.vue`
-        })
-      }
-    },
+  nitro: {
+    preset: 'vercel',
   },
   vite: {
     plugins: [
       tailwindcss(),
     ],
   },
-  shadcn: {
-    prefix: '',
-    componentDir: '~/components/ui'
+
+  hooks: {
+    'pages:extend'(pages: NuxtPage[]) {
+      pages.length = 0
+
+      pages.push({
+        name: '404',
+        path: '/404',
+        file: '~/components/pages/404.vue',
+      })
+
+      const productConfig = getProductConfig(PRODUCT_ID)
+
+      for (const route of productConfig.routes) {
+        const defaultLocale = getDefaultLocale(PRODUCT_ID)
+        const routePath = typeof route.path === 'string'
+          ? route.path
+          : route.path[defaultLocale] as string
+        pages.push({
+          name: route.name,
+          path: routePath,
+          file: `~/components/pages/${route.cmp}.vue`,
+        })
+      }
+    },
   },
-  experimental: {
-    scanPageMeta: true
-  },
-  
-  imports: {
-    dirs: [
-      'data/hooks/**'
-    ]
+  i18n: {
+    locales: [
+      ...getLocales(PRODUCT_ID),
+    ],
+    defaultLocale: getDefaultLocale(PRODUCT_ID),
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root', // recommended for SEO
+      alwaysRedirect: false,
+      fallbackLocale: getDefaultLocale(PRODUCT_ID),
+    },
+    langDir: 'lang/',
+    customRoutes: 'config', // disable custom route with page components
+    pages: {
+      'grant-thanks': {
+        en: '/about-us', // -> accessible at /about-us (no prefix since it's the default locale)
+        cs: '/a-propos', // -> accessible at /fr/a-propos
+      },
+    },
   },
   nuxtQuery: {
     queryClientOptions: {
@@ -73,27 +93,9 @@ export default defineNuxtConfig({
     autoImports: false,
     devtools: true,
   },
-  i18n: {
-    locales: [
-      ...getLocales(PRODUCT_ID),
-    ],
-    defaultLocale: getDefaultLocale(PRODUCT_ID),
-    strategy: 'prefix_except_default',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root', // recommended for SEO
-      alwaysRedirect: false,
-      fallbackLocale: getDefaultLocale(PRODUCT_ID)
-    },
-    langDir: 'lang/',
-    customRoutes: 'config', // disable custom route with page components
-    pages: {
-      'grant-thanks': {
-        en: '/about-us', // -> accessible at /about-us (no prefix since it's the default locale)
-        cs: '/a-propos', // -> accessible at /fr/a-propos
-      }
-    }
-  }
+  shadcn: {
+    prefix: '',
+    componentDir: '~/components/ui',
+  },
 
 })

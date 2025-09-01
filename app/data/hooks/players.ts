@@ -1,16 +1,18 @@
-import { useMutation, useQueryClient } from '@tanstack/vue-query'
-import { keysFactory } from '~/data/utils/keys-factory'
-import { everyMin, getCachedData, useCreateQuery } from '~/data/utils/query-options'
-import { playersApi } from '~/data/api/players'
-import type { GetPlayerParams, CreatePlayerParams, UpdatePlayerParams, DeletePlayerParams } from '~/data/api/players'
-import type { ApiResult } from '~/data/utils/api-helpers'
+import {useMutation, useQueryClient} from '@tanstack/vue-query'
+
+import type {GetPlayerParams, CreatePlayerParams, UpdatePlayerParams, DeletePlayerParams} from '~/data/api/players'
+import type {ApiResult} from '~/data/utils/api-helpers'
+
+import {playersApi} from '~/data/api/players'
+import {keysFactory} from '~/data/utils/keys-factory'
+import {everyMin, getCachedData, useCreateQuery} from '~/data/utils/query-options'
 
 const kf = keysFactory('players')
 
-const listPlayersAndCharactersKey = () => 
+const listPlayersAndCharactersKey = () =>
   kf.create('list')
 
-const itemPlayerKey = (params: GetPlayerParams) => 
+const itemPlayerKey = (params: GetPlayerParams) =>
   kf.create('item', params)
 
 export function usePlayersAndCharactersQuery({enabled = true} = {}) {
@@ -26,12 +28,14 @@ export function usePlayersAndCharactersQuery({enabled = true} = {}) {
       ...getCachedData(queryKey),
       onSuccess: (players: ApiResult<typeof playersApi.list>) => {
         players.forEach((playerData) => {
-          if (!playerData.player) return
-          const playerQueryKey = itemPlayerKey({ id: playerData.player.id })
+          if (!playerData.player) {
+            return
+          }
+          const playerQueryKey = itemPlayerKey({id: playerData.player.id})
           queryClient.setQueryData(playerQueryKey, playerData)
         })
       },
-    }
+    },
   )
 }
 
@@ -44,7 +48,7 @@ export function usePlayerQuery(params: GetPlayerParams) {
     {
       ...everyMin(15),
       ...getCachedData(queryKey),
-    }
+    },
   )
 }
 
@@ -55,12 +59,12 @@ export function usePlayerCreateMutation() {
     mutationFn: (params: CreatePlayerParams) => playersApi.create(params),
     onSuccess: (data) => {
       if (data.id) {
-        queryClient.setQueryData(itemPlayerKey({ id: data.id }), { player: data })
+        queryClient.setQueryData(itemPlayerKey({id: data.id}), {player: data})
       }
     },
     onSettled: () => {
       const queryKey = listPlayersAndCharactersKey()
-      queryClient.invalidateQueries({ queryKey })
+      queryClient.invalidateQueries({queryKey})
     },
   })
 }
@@ -73,12 +77,12 @@ export function usePlayerUpdateMutation() {
     onSuccess: (data, variables) => {
       const id = data.id ?? variables.id
       if (id) {
-        queryClient.setQueryData(itemPlayerKey({ id }), { player: data })
+        queryClient.setQueryData(itemPlayerKey({id}), {player: data})
       }
     },
     onSettled: () => {
       const queryKey = listPlayersAndCharactersKey()
-      queryClient.invalidateQueries({ queryKey })
+      queryClient.invalidateQueries({queryKey})
     },
   })
 }
@@ -88,20 +92,20 @@ export function usePlayerDeleteMutation() {
   const listKey = listPlayersAndCharactersKey()
 
   return useMutation<ApiResult<typeof playersApi.delete>, Error, DeletePlayerParams>({
-    mutationFn: (params) => playersApi.delete(params),
+    mutationFn: params => playersApi.delete(params),
 
     onMutate: async (variables) => {
-      await queryClient.cancelQueries({ queryKey: listKey })
+      await queryClient.cancelQueries({queryKey: listKey})
       const prev = queryClient.getQueryData<ApiResult<typeof playersApi.list>>(listKey)
 
       if (prev) {
         queryClient.setQueryData(listKey, prev.filter(p => p.player?.id !== variables.id))
       }
 
-      const itemKey = itemPlayerKey({ id: variables.id })
-      queryClient.removeQueries({ queryKey: itemKey, exact: true })
+      const itemKey = itemPlayerKey({id: variables.id})
+      queryClient.removeQueries({queryKey: itemKey, exact: true})
 
-      return { prev }
+      return {prev}
     },
 
     onError: (_err, _vars, ctx) => {
@@ -111,7 +115,7 @@ export function usePlayerDeleteMutation() {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: listKey })
+      queryClient.invalidateQueries({queryKey: listKey})
     },
   })
 }

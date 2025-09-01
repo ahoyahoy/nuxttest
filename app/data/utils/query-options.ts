@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import {useQuery, useQueryClient} from '@tanstack/vue-query'
 
 export const everyMin = (minutes: number) => ({
   staleTime: 1000 * 60 * minutes,
@@ -8,7 +8,7 @@ export const everyMin = (minutes: number) => ({
 export const getCachedData = (queryKey: readonly unknown[]) => {
   const queryClient = useQueryClient()
   const cachedData = queryClient.getQueryData(queryKey)
-  
+
   return {
     initialData: cachedData,
     initialDataUpdatedAt: cachedData ? Date.now() : undefined,
@@ -18,7 +18,7 @@ export const getCachedData = (queryKey: readonly unknown[]) => {
 export const useCreateQuery = <TQueryFn extends () => Promise<any>>(
   queryKey: readonly unknown[],
   queryFn: TQueryFn,
-  options: any = {}
+  options: any = {},
 ) => {
   const query = useQuery<Awaited<ReturnType<TQueryFn>>>({
     queryKey,
