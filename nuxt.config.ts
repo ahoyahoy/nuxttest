@@ -53,6 +53,12 @@ export default defineNuxtConfig({
   experimental: {
     scanPageMeta: true
   },
+  
+  imports: {
+    dirs: [
+      'data/hooks/**'
+    ]
+  },
   nuxtQuery: {
     queryClientOptions: {
       defaultOptions: {

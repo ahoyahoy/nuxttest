@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { usePlayersAndCharactersQuery } from '~/data/hooks/players';
 import PlayerModal from '~/components/PlayerModal.vue';
 
 const { data: players, isLoading, error, refetch, suspense } = usePlayersAndCharactersQuery();

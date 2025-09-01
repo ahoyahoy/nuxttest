@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { Character } from '@mj/api-demo/api/gen/ts/demo/v1/api_pb';
-import { useRaceQuery } from '~/data/hooks/races';
-import { useClassQuery } from '~/data/hooks/classes';
 
 interface Props {
   character: Character;
